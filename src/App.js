@@ -23,20 +23,22 @@ class App extends Component {
     this.state = {
       health: 6,
       wordToFind: 'react',
-      wordActuallyFind: '_____',
+      wordActuallyFind: '_ _ _ _ _',
       letters: this.getAlphabet()
     }
   }
 
   render () {
+    const { letters, health, wordActuallyFind } = this.state
+
     return (
       <div>
         {/* Affiche un clavier complet de 26 touches */}
-        <Keyboard letters={this.state.letters}/>
+        <Keyboard letters={letters} />
         {/* Affiche la bar de vie du joueur */}
-        <HealthBar health={this.state.health}/>
+        <HealthBar health={health} />
         {/* Affiche le statut du mot actuel */}
-        <WordIndicator word={this.state.wordActuallyFind}/>
+        <WordIndicator word={wordActuallyFind} />
       </div>
     )
   }

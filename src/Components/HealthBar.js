@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 
 class HealthBar extends Component {
   render () {
@@ -8,6 +9,10 @@ class HealthBar extends Component {
       </div>
     )
   }
+}
+
+HealthBar.propTypes = {
+  health: PropTypes.number
 }
 
 export default HealthBar
