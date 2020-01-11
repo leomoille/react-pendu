@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 class Keyboard extends Component {
   handleClick (letter) {
-    console.log(letter)
+    this.props.handleClick(letter)
   }
 
   render () {
@@ -20,7 +20,8 @@ class Keyboard extends Component {
 }
 
 Keyboard.propTypes = {
-  letters: PropTypes.array
+  letters: PropTypes.array,
+  handleClick: PropTypes.func
 }
 
 export default Keyboard
