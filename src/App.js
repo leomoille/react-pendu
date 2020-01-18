@@ -34,27 +34,62 @@ class App extends Component {
    * @returns {String} the word with letters replaced by '_' underscores
    */
   generateWordActuallyFind (wordToFind) {
-    if (typeof wordToFind !== String) {
-      new Error()
+    if (typeof wordToFind !== 'string') {
+      return new Error('Ce mot n\'est pas un mot')
     }
+
     // algorithme
     let wordAnonyme = ''
     for (let i = 0; i < wordToFind.length; i++) {
-      wordAnonyme += wordToFind[i].replace(wordToFind[i], '_ ')
+      wordAnonyme += '_ '
     }
+
     // return
     console.log(wordAnonyme)
 
     return wordAnonyme
   }
 
-  handleWordActuallyFind () {
+  /**
+   * handleWordActuallyFind - ...
+   * @param {String} wordToFind - the word to find
+   * @param {String} letter - the letter used by the keyboard
+   * @returns {String} the word with letters replaced by the correct letter
+   * 1 - DOIT ETRE UNE LETTRE  (react, t) -> _ _ _ _t
+   *         var newAnonyme = ''
+   *        POUR WORDTOFIND.LENGTH
+   *            SI WORDTOFIND[I] === letter
+   *              newAnonyme += letter
+   *            SINON
+   *               newAnonyme += '_'
+   *        return newAnonyme
+   *                         react       _ e _ _ _         t        ->    _ e _ _ t    */
+  handleWordActuallyFind (wordToFind, wordActuallyFind, letter) {
+    // TEST
+    console.log('HANDLEWORDACTUALLYFIND', 'wordTofind:' + wordToFind, 'wordActuallyFind:' + wordActuallyFind, 'letter:' + letter)
+
+    const newAnonyme = wordActuallyFind.split(' ')
+
+    for (let i = 0; i < wordToFind.length; i++) {
+      if (wordToFind[i] === letter) {
+        newAnonyme[i] = `${letter}`
+      }
+    }
+
+    console.log('RETURN', 'newAnonyme' + newAnonyme)
+    return newAnonyme.join(' ')
   }
 
   onKeyboardClick (letter) {
-    console.log(letter)
+    console.log('ONKEYBOARDCLICK', 'letter:' + letter, 'this.state.wordToFind:' + this.state.wordToFind)
 
-    this.setState({ wordActuallyFind: letter })
+    var newWordActuallyFind = this.handleWordActuallyFind(this.state.wordToFind, this.state.wordActuallyFind, letter)
+    if (newWordActuallyFind === this.state.wordActuallyFind) {
+      const actualizedHealth = this.state.health - 1
+      this.setState({ health: actualizedHealth })
+    } else {
+      this.setState({ wordActuallyFind: newWordActuallyFind })
+    }
   }
 
   // TEST
@@ -83,7 +118,6 @@ class App extends Component {
 
     return (
       <div>
-        <button onClick={() => this.generateWordActuallyFind('react')}>Click</button>
         {/* Affiche un clavier complet de 26 touches */}
         <Keyboard letters={letters} handleClick={this.onKeyboardClick.bind(this)}/>
         {/* Affiche la bar de vie du joueur */}
