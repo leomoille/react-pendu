@@ -8,11 +8,18 @@ class Keyboard extends Component {
 
   render () {
     return (
-      <div className="Keyboard">
+      <div className='Keyboard'>
         <p>Keyboard: </p>
         {/* Touches du clavier ici */}
         {this.props.letters.map(letter => {
-          return <button className="Key" key={letter.letter} onClick={() => this.handleClick(letter.letter)}>{letter.letter}</button>
+          return (
+            <button
+              className='Key'
+              key={letter.letter}
+              onClick={() => this.handleClick(letter.letter)}>
+              {letter.letter}
+            </button>
+          )
         })}
       </div>
     )
