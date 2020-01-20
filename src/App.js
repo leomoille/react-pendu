@@ -5,7 +5,17 @@ import HealthBar from './Components/HealthBar'
 import './App.css'
 
 class App extends Component {
-  getAlphabet () {
+  constructor (props) {
+    super(props)
+    this.state = {
+      health: 6,
+      wordToFind: 'react',
+      wordActuallyFind: this.anonymizeWordToFind('react'),
+      letters: this.lettersGenerating()
+    }
+  }
+
+  lettersGenerating () {
     const alphabet = 'abcdefghijklmnopqrstuvwxyz'
     const letters = []
     /* Ajout de chaque lettre de l'alphabet dans le tableau d'objet letters */
@@ -18,99 +28,76 @@ class App extends Component {
     return letters
   }
 
-  constructor (props) {
-    super(props)
-    this.state = {
-      health: 6,
-      wordToFind: 'react',
-      wordActuallyFind: this.generateWordActuallyFind('react'),
-      letters: this.getAlphabet()
-    }
-  }
-
   /**
-   * generateWordActuallyFind - generate wordActuallyFind ( with letters replaced by '_' underscores) from wordToFind
-   * @param {String} wordToFind - the word to find
-   * @returns {String} the word with letters replaced by '_' underscores
+   * Anonimyze a word
+   * @param {string} wordToFind - A string to anonymize
+   * @returns {string} wordToFind anonymized
    */
-  generateWordActuallyFind (wordToFind) {
+  anonymizeWordToFind (wordToFind) {
     if (typeof wordToFind !== 'string') {
       return new Error('Ce mot n\'est pas un mot')
     }
 
-    // algorithme
-    let wordAnonyme = ''
+    let WordToFindAnonymized = ''
     for (let i = 0; i < wordToFind.length; i++) {
-      wordAnonyme += '_ '
+      WordToFindAnonymized += '_ '
     }
 
-    // return
-    console.log(wordAnonyme)
-
-    return wordAnonyme
+    return WordToFindAnonymized
   }
 
   /**
-   * handleWordActuallyFind - ...
-   * @param {String} wordToFind - the word to find
-   * @param {String} letter - the letter used by the keyboard
-   * @returns {String} the word with letters replaced by the correct letter
-   * 1 - DOIT ETRE UNE LETTRE  (react, t) -> _ _ _ _t
-   *         var newAnonyme = ''
-   *        POUR WORDTOFIND.LENGTH
-   *            SI WORDTOFIND[I] === letter
-   *              newAnonyme += letter
-   *            SINON
-   *               newAnonyme += '_'
-   *        return newAnonyme
-   *                         react       _ e _ _ _         t        ->    _ e _ _ t    */
-  handleWordActuallyFind (wordToFind, wordActuallyFind, letter) {
-    // TEST
-    console.log('HANDLEWORDACTUALLYFIND', 'wordTofind:' + wordToFind, 'wordActuallyFind:' + wordActuallyFind, 'letter:' + letter)
-
-    const newAnonyme = wordActuallyFind.split(' ')
+   * Add the new letter to the word
+   * @param {string} wordToFind - The word to find
+   * @param {string} wordActuallyFind - the word anonimyzed to find (with space between underscores)
+   * @param {string} letter - The letter to add in the word
+   * @returns {string} - Return the word with the new letter
+   */
+  handleKeyboardCick (wordToFind, wordActuallyFind, letter) {
+    const wordActuallyFindArr = wordActuallyFind.split(' ')
 
     for (let i = 0; i < wordToFind.length; i++) {
       if (wordToFind[i] === letter) {
-        newAnonyme[i] = `${letter}`
+        wordActuallyFindArr[i] = `${letter}`
       }
     }
 
-    console.log('RETURN', 'newAnonyme' + newAnonyme)
-    return newAnonyme.join(' ')
+    return wordActuallyFindArr.join(' ')
   }
 
+  /**
+   * Check the letter pressed by the virtual keyboard
+   * @param {string} letter - The letter to check
+   */
   onKeyboardClick (letter) {
-    console.log('ONKEYBOARDCLICK', 'letter:' + letter, 'this.state.wordToFind:' + this.state.wordToFind)
+    const wordToFindCheck = this.handleKeyboardCick(this.state.wordToFind, this.state.wordActuallyFind, letter)
 
-    var newWordActuallyFind = this.handleWordActuallyFind(this.state.wordToFind, this.state.wordActuallyFind, letter)
-    if (newWordActuallyFind === this.state.wordActuallyFind) {
-      const actualizedHealth = this.state.health - 1
-      this.setState({ health: actualizedHealth })
+    if (wordToFindCheck === this.state.wordActuallyFind) {
+      this.setState({ health: this.state.health - 1 })
     } else {
-      this.setState({ wordActuallyFind: newWordActuallyFind })
+      this.setState({ wordActuallyFind: wordToFindCheck })
     }
   }
 
   // TEST
   testSimulation () {
     // test avec un mot
-    if (this.generateWordActuallyFind('react') === '_ _ _ _ _') {
+    if (this.anonymizeWordToFind('react') === '_ _ _ _ _') {
       console.log('OK')
     } else {
       console.log('fail RED RED RED')
     }
 
     // test avec deux mots
-    if (this.generateWordActuallyFind('react et') === '_ _ _ _ _   _ _') {
+    if (this.anonymizeWordToFind('react et') === '_ _ _ _ _   _ _') {
       console.log('OK')
     } else {
       console.log('fail RED RED RED')
     }
 
     // test avec deux mots
-    this.testSimulation.assertEquals(this.generateWordActuallyFind('react et'), '_ _ _ _ _   _ _')
-    this.testSimulation.raiseError(this.generateWordActuallyFind(-1))
+    this.testSimulation.assertEquals(this.anonymizeWordToFind('react et'), '_ _ _ _ _   _ _')
+    this.testSimulation.raiseError(this.anonymizeWordToFind(-1))
   }
 
   render () {
