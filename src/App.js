@@ -8,9 +8,9 @@ class App extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      health: 6,
-      wordToFind: 'react',
-      wordActuallyFind: this.anonymizeWordToFind('react'),
+      health: 10,
+      wordToFind: 'abc', // For test
+      wordActuallyFind: this.anonymizeWordToFind('abc'), // for test
       letters: this.lettersGenerating()
     }
   }
@@ -35,7 +35,7 @@ class App extends Component {
    */
   anonymizeWordToFind (wordToFind) {
     if (typeof wordToFind !== 'string') {
-      return new Error('Ce mot n\'est pas un mot')
+      return new Error("Ce mot n'est pas un mot")
     }
 
     let WordToFindAnonymized = ''
@@ -70,47 +70,51 @@ class App extends Component {
    * @param {string} letter - The letter to check
    */
   onKeyboardClick (letter) {
-    const wordToFindCheck = this.handleKeyboardCick(this.state.wordToFind, this.state.wordActuallyFind, letter)
-
+    const wordToFindCheck = this.handleKeyboardCick(
+      this.state.wordToFind,
+      this.state.wordActuallyFind,
+      letter.letter
+    )
+    letter.used = true
     if (wordToFindCheck === this.state.wordActuallyFind) {
-      this.setState({ health: this.state.health - 1 })
+      this.defeatCheck()
     } else {
-      this.setState({ wordActuallyFind: wordToFindCheck })
+      this.victoryCheck(wordToFindCheck)
     }
   }
 
-  // TEST
-  testSimulation () {
-    // test avec un mot
-    if (this.anonymizeWordToFind('react') === '_ _ _ _ _') {
-      console.log('OK')
+  defeatCheck () {
+    if (this.state.health === 1) {
+      this.setState({
+        health: this.state.health - 1,
+        wordActuallyFind: `Perdu! Le mot était : ${this.state.wordToFind}`
+      })
     } else {
-      console.log('fail RED RED RED')
+      this.setState({ health: this.state.health - 1 })
     }
+  }
 
-    // test avec deux mots
-    if (this.anonymizeWordToFind('react et') === '_ _ _ _ _   _ _') {
-      console.log('OK')
-    } else {
-      console.log('fail RED RED RED')
-    }
-
-    // test avec deux mots
-    this.testSimulation.assertEquals(this.anonymizeWordToFind('react et'), '_ _ _ _ _   _ _')
-    this.testSimulation.raiseError(this.anonymizeWordToFind(-1))
+  victoryCheck (wordToFindCheck) {
+    this.setState({ wordActuallyFind: wordToFindCheck }, () => {
+      if (this.state.wordActuallyFind.indexOf('_') === -1) {
+        this.setState({
+          wordActuallyFind: `Victoire! Le mot était bien : ${this.state.wordToFind}`
+        })
+      }
+    })
   }
 
   render () {
     const { letters, health, wordActuallyFind } = this.state
 
     return (
-      <div>
-        {/* Affiche un clavier complet de 26 touches */}
-        <Keyboard letters={letters} handleClick={this.onKeyboardClick.bind(this)}/>
-        {/* Affiche la bar de vie du joueur */}
+      <div className='App'>
         <HealthBar health={health} />
-        {/* Affiche le statut du mot actuel */}
         <WordIndicator word={wordActuallyFind} />
+        <Keyboard
+          letters={letters}
+          handleClick={this.onKeyboardClick.bind(this)}
+        />
       </div>
     )
   }
