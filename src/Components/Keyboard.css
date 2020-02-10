@@ -1,0 +1,28 @@
+.keyboard {
+  width: 50%;
+  background-color: rgb(73, 73, 73);
+  color: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  box-shadow: 10px 5px 8px #888888;
+}
+
+.keyboard--button {
+  width: 50px;
+  height: 50px;
+  border: none;
+  margin: 10px;
+  background-color: #ffffff;
+}
+
+.keyboard--button:hover {
+  background-color: #b8b8b8;
+}
+
+.keyboard--button__used {
+  cursor: not-allowed;
+  background-color: rgb(117, 117, 117);
+  color: white;
+}

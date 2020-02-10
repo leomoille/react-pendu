@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import './Keyboard.css'
 
 class Keyboard extends Component {
   handleClick (letter) {
@@ -8,15 +9,16 @@ class Keyboard extends Component {
 
   render () {
     return (
-      <div className='Keyboard'>
-        <p>Keyboard: </p>
+      <div className='keyboard'>
         {/* Touches du clavier ici */}
         {this.props.letters.map(letter => {
+          console.log(letter)
+
           return (
             <button
-              className='Key'
+              className={`keyboard--button ${letter.used ? 'keyboard--button__used' : ''}`}
               key={letter.letter}
-              onClick={() => this.handleClick(letter.letter)}>
+              onClick={() => this.handleClick(letter)}>
               {letter.letter}
             </button>
           )
