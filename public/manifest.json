@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "React Pendu",
+  "name": "Le jeu du pendu",
   "icons": [
     {
       "src": "favicon.ico",
